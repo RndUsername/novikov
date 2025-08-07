@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://dihmo87qcy1ke"]
+
+[ext_resource type="Script" uid="uid://0mpvkcxqcq8r" path="res://scripts/setup.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://i7c8evqoq7jg" path="res://scripts/sketch/sketch.gd" id="1_o5qli"]
+[ext_resource type="LabelSettings" uid="uid://c82ex1ix7y76s" path="res://label_settings.tres" id="2_sugp2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0wfyh"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_0wfyh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_left = 17.0
+offset_top = 6.0
+offset_right = 143.0
+offset_bottom = 46.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Point"
+label_settings = ExtResource("2_sugp2")
+
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Line"
+label_settings = ExtResource("2_sugp2")
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "solve"
+
+[node name="Sketch" type="Sketch" parent="."]
+input_pickable = true
+script = ExtResource("1_o5qli")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sketch"]
+position = Vector2(575, 325)
+shape = SubResource("CircleShape2D_0wfyh")
+
+[connection signal="pressed" from="HBoxContainer/Button" to="Sketch" method="_on_solve_button_pressed"]
