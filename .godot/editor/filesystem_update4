@@ -1,0 +1,6 @@
+res://scenes/sketchLine.tscn
+res://label_settings.tres
+res://scenes/sketchPoint.tscn
+res://scenes/main.tscn
+res://scripts/sketch/line.gd
+res://scripts/sketch/point.gd
