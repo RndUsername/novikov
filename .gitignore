@@ -24,22 +24,17 @@ export_presets.cfg
 # SConstruct projects; rebuild them rather than committing them. The .gdextension
 # config files are NOT ignored (see the negations below) so the project still
 # knows how to load the libraries on a fresh clone.
-bin/
-!bin/
+# Ignore everything in bin/ (runtime libs, .lib/.exp/.pdb, backups), then
+# re-include only the .gdextension config (and its .uid) so the project still
+# knows how to load the libraries on a fresh clone.
+bin/**
 !bin/**/
 !bin/**/*.gdextension
+!bin/**/*.gdextension.uid
 
 # ---------------------------------------------------------------------------
-# Native build / compiler artifacts (any extension built in-tree)
+# Shared libraries anywhere else (e.g. addon binaries)
 # ---------------------------------------------------------------------------
-*.o
-*.os
-*.obj
-*.a
-*.lib
-*.exp
-*.ilk
-*.pdb
 *.dll
 *.so
 *.so.*
