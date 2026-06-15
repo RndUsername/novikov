@@ -1,43 +1,151 @@
-[gd_scene load_steps=5 format=3 uid="uid://dihmo87qcy1ke"]
+[gd_scene format=3 uid="uid://csa55xqld4u6w"]
 
-[ext_resource type="Script" uid="uid://0mpvkcxqcq8r" path="res://scripts/setup.gd" id="1_0wfyh"]
-[ext_resource type="Script" uid="uid://i7c8evqoq7jg" path="res://scripts/sketch/sketch.gd" id="1_o5qli"]
-[ext_resource type="LabelSettings" uid="uid://c82ex1ix7y76s" path="res://label_settings.tres" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://nguwmcp25e27" path="res://scripts/camera_pivot.gd" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://i7c8evqoq7jg" path="res://scripts/sketch/sketch.gd" id="5_tefeu"]
+[ext_resource type="Shader" uid="uid://dl3kaxiltr074" path="res://shaders/sketch_ribbons.gdshader" id="6_ribbon"]
+[ext_resource type="Shader" uid="uid://dwniyigllhai1" path="res://shaders/sketch_points.gdshader" id="7_points"]
+[ext_resource type="Shader" uid="uid://37swans647r" path="res://shaders/sketch_grid.gdshader" id="8_grid"]
+[ext_resource type="Shader" uid="uid://bskinoodaaw1g" path="res://shaders/sketch_fill.gdshader" id="9_fill"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0wfyh"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_env"]
+sky_top_color = Color(0.38, 0.45, 0.55, 1)
+sky_horizon_color = Color(0.62, 0.63, 0.66, 1)
+ground_bottom_color = Color(0.2, 0.22, 0.25, 1)
+ground_horizon_color = Color(0.62, 0.63, 0.66, 1)
 
-[node name="Node2D" type="Node2D"]
-script = ExtResource("1_0wfyh")
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("ProceduralSkyMaterial_env")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-offset_left = 17.0
-offset_top = 6.0
-offset_right = 143.0
-offset_bottom = 46.0
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_env")
+tonemap_mode = 3
+ssao_enabled = true
+ssao_intensity = 1.5
 
-[node name="Label" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-text = "Point"
-label_settings = ExtResource("2_sugp2")
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_o6xl0"]
 
-[node name="CheckButton" type="CheckButton" parent="HBoxContainer"]
-layout_mode = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ribbon"]
+render_priority = 0
+shader = ExtResource("6_ribbon")
+shader_parameter/line_width_px = 3.0
+shader_parameter/line_color = Color(0.9, 0.9, 0.9, 1)
 
-[node name="Label2" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-text = "Line"
-label_settings = ExtResource("2_sugp2")
+[sub_resource type="QuadMesh" id="QuadMesh_ribbon"]
+material = SubResource("ShaderMaterial_ribbon")
 
-[node name="Button" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "solve"
+[sub_resource type="MultiMesh" id="MultiMesh_ribbon"]
+transform_format = 1
+mesh = SubResource("QuadMesh_ribbon")
 
-[node name="Sketch" type="Sketch" parent="."]
-input_pickable = true
-script = ExtResource("1_o5qli")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_points"]
+render_priority = 1
+shader = ExtResource("7_points")
+shader_parameter/point_size_px = 9.0
+shader_parameter/point_color = Color(0.95, 0.95, 0.95, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sketch"]
-position = Vector2(575, 325)
-shape = SubResource("CircleShape2D_0wfyh")
+[sub_resource type="QuadMesh" id="QuadMesh_point"]
+material = SubResource("ShaderMaterial_points")
 
-[connection signal="pressed" from="HBoxContainer/Button" to="Sketch" method="_on_solve_button_pressed"]
+[sub_resource type="MultiMesh" id="MultiMesh_points"]
+transform_format = 1
+mesh = SubResource("QuadMesh_point")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grid"]
+render_priority = -2
+shader = ExtResource("8_grid")
+shader_parameter/grid_spacing = 1.0
+shader_parameter/grid_color = Color(0.6, 0.6, 0.6, 0.25)
+shader_parameter/axis_color = Color(0.8, 0.8, 0.8, 0.5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_grid"]
+material = SubResource("ShaderMaterial_grid")
+size = Vector2(200, 200)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fill"]
+render_priority = -1
+shader = ExtResource("9_fill")
+shader_parameter/fill_color = Color(0.55, 0.75, 1, 0.25)
+
+[node name="Node3D" type="Node3D" unique_id=739874305]
+
+[node name="Camera Pivot" type="Node3D" parent="." unique_id=1265293984]
+transform = Transform3D(0.957335, 0.13958, -0.253037, 0, 0.875616, 0.483007, 0.288982, -0.4624, 0.838258, 0, 0, 0)
+script = ExtResource("3_jyhfs")
+
+[node name="Camera3D" type="Camera3D" parent="Camera Pivot" unique_id=1586280896]
+transform = Transform3D(1, 4.44089e-16, -2.98023e-08, 0, 1, 1.49012e-08, 2.98023e-08, -1.49012e-08, 1, 0, 0, 5.02897)
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1991083465]
+environment = SubResource("Environment_env")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750182736]
+transform = Transform3D(0.953433, 0.172212, -0.247605, 0, 0.82096, 0.570986, 0.301605, -0.544397, 0.78273, 0, 3.88929, 0)
+light_energy = 1.2
+shadow_enabled = true
+shadow_opacity = 0.6
+
+[node name="Sketch" type="Sketch" parent="." unique_id=1624768132]
+script = ExtResource("5_tefeu")
+
+[node name="Area3D" type="Area3D" parent="Sketch" unique_id=841992154]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sketch/Area3D" unique_id=1555876181]
+shape = SubResource("WorldBoundaryShape3D_o6xl0")
+
+[node name="LineRibbons" type="MultiMeshInstance3D" parent="Sketch" unique_id=721153270]
+cast_shadow = 0
+extra_cull_margin = 2.0
+multimesh = SubResource("MultiMesh_ribbon")
+
+[node name="PointDots" type="MultiMeshInstance3D" parent="Sketch" unique_id=46620317]
+cast_shadow = 0
+extra_cull_margin = 2.0
+multimesh = SubResource("MultiMesh_points")
+
+[node name="Grid" type="MeshInstance3D" parent="Sketch" unique_id=534936370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_grid")
+
+[node name="LoopFills" type="MeshInstance3D" parent="Sketch" unique_id=496528311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, 0)
+material_override = SubResource("ShaderMaterial_fill")
+cast_shadow = 0
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=175801085]
+
+[node name="SolveButton" type="Button" parent="UI" unique_id=980218167]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 140.0
+offset_bottom = 60.0
+text = "Solve"
+
+[node name="VerticalButton" type="Button" parent="UI" unique_id=2118338612]
+offset_left = 160.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 60.0
+text = "Vertical"
+
+[node name="ChamferButton" type="Button" parent="UI" unique_id=1588051274]
+offset_left = 300.0
+offset_top = 20.0
+offset_right = 420.0
+offset_bottom = 60.0
+text = "Chamfer"
+
+[node name="FilletButton" type="Button" parent="UI" unique_id=1196643536]
+offset_left = 440.0
+offset_top = 20.0
+offset_right = 560.0
+offset_bottom = 60.0
+text = "Fillet"
+
+[connection signal="input_event" from="Sketch/Area3D" to="Sketch" method="_on_sketch_plane_input"]
+[connection signal="pressed" from="UI/SolveButton" to="Sketch" method="_on_solve_button_pressed"]
+[connection signal="pressed" from="UI/VerticalButton" to="Sketch" method="_on_vertical_button_pressed"]
+[connection signal="pressed" from="UI/ChamferButton" to="Sketch" method="_on_chamfer_button_pressed"]
+[connection signal="pressed" from="UI/FilletButton" to="Sketch" method="_on_fillet_button_pressed"]
