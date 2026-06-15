@@ -1,0 +1,14 @@
+[configuration]
+
+entry_symbol = "occt_init_extension"
+compatibility_minimum = "4.4"
+reloadable = true
+
+[libraries]
+
+windows.debug.x86_64 = "res://bin/occt/lib.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://bin/occt/lib.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "res://bin/occt/lib.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://bin/occt/lib.linux.template_release.x86_64.so"
+macos.debug = "res://bin/occt/lib.macos.template_debug.framework"
+macos.release = "res://bin/occt/lib.macos.template_release.framework"

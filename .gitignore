@@ -1,6 +1,63 @@
-# Godot 4+ specific ignores
+# ---------------------------------------------------------------------------
+# Godot 4+
+# ---------------------------------------------------------------------------
+# Editor import/cache directory — fully regenerated on open.
 .godot/
+# Mono/.NET (unused now, harmless to keep ignored).
+.mono/
+data_*/
+mono_crash.*.json
+# Export output and machine-local export config (may contain paths/keys).
+/builds/
+/export/
+export_presets.cfg
+
+# ---------------------------------------------------------------------------
+# Platform build output
+# ---------------------------------------------------------------------------
 /android/
-addons
-bin/slvs
+
+# ---------------------------------------------------------------------------
+# Native GDExtensions (occt, slvs)
+# ---------------------------------------------------------------------------
+# The compiled libraries are build artifacts produced from the *-extension
+# SConstruct projects; rebuild them rather than committing them. The .gdextension
+# config files are NOT ignored (see the negations below) so the project still
+# knows how to load the libraries on a fresh clone.
+bin/
+!bin/
+!bin/**/
+!bin/**/*.gdextension
+
+# ---------------------------------------------------------------------------
+# Native build / compiler artifacts (any extension built in-tree)
+# ---------------------------------------------------------------------------
+*.o
+*.os
+*.obj
+*.a
+*.lib
+*.exp
+*.ilk
+*.pdb
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# ---------------------------------------------------------------------------
+# Addons
+# ---------------------------------------------------------------------------
+# Editor-only / installed plugins are not versioned in this project.
+addons/
+
+# ---------------------------------------------------------------------------
+# Editor & OS junk
+# ---------------------------------------------------------------------------
+# Lock/rename leftovers (e.g. ~lib.windows....dll while the editor holds a DLL).
+~*
 *.tmp
+*.bak
+.DS_Store
+Thumbs.db
+desktop.ini
