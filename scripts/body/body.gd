@@ -22,6 +22,18 @@ func build_extrusion(profile: PackedVector2Array, height: float) -> void:
 	set_body(OcctBody.extrude_polygon(profile, height))
 
 
+# Extrude a true circle into a smooth cylinder (one cylindrical face), instead
+# of a faceted prism of the circle's polygon approximation.
+func build_circle_extrusion(center: Vector2, radius: float, height: float) -> void:
+	set_body(OcctBody.extrude_circle(center, radius, height))
+
+
+# Extrude a mixed line/arc contour (see SketchGeometry.face_to_contour), so a
+# face bounded partly by a circle (e.g. a half-disc) keeps a smooth curved side.
+func build_profile_extrusion(contour: Array, height: float) -> void:
+	set_body(OcctBody.extrude_profile(contour, height))
+
+
 func set_body(body: OcctBody) -> void:
 	if body == null or body.is_empty():
 		return # failed operation: keep the previous state, error is in the log

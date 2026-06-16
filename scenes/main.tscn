@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://dwniyigllhai1" path="res://shaders/sketch_points.gdshader" id="7_points"]
 [ext_resource type="Shader" uid="uid://37swans647r" path="res://shaders/sketch_grid.gdshader" id="8_grid"]
 [ext_resource type="Shader" uid="uid://bskinoodaaw1g" path="res://shaders/sketch_fill.gdshader" id="9_fill"]
+[ext_resource type="Script" path="res://scripts/settings_panel.gd" id="10_settings"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_env"]
 sky_top_color = Color(0.38, 0.45, 0.55, 1)
@@ -67,6 +68,9 @@ render_priority = -1
 shader = ExtResource("9_fill")
 shader_parameter/fill_color = Color(0.55, 0.75, 1, 0.25)
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
+allow_unpress = true
+
 [node name="Node3D" type="Node3D" unique_id=739874305]
 
 [node name="Camera Pivot" type="Node3D" parent="." unique_id=1265293984]
@@ -123,29 +127,66 @@ offset_right = 140.0
 offset_bottom = 60.0
 text = "Solve"
 
-[node name="VerticalButton" type="Button" parent="UI" unique_id=2118338612]
+[node name="LineButton" type="Button" parent="UI" unique_id=2118338613]
 offset_left = 160.0
 offset_top = 20.0
 offset_right = 280.0
 offset_bottom = 60.0
-text = "Vertical"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Line"
 
-[node name="ChamferButton" type="Button" parent="UI" unique_id=1588051274]
+[node name="CircleButton" type="Button" parent="UI" unique_id=2118338614]
 offset_left = 300.0
 offset_top = 20.0
 offset_right = 420.0
 offset_bottom = 60.0
-text = "Chamfer"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "Circle"
 
-[node name="FilletButton" type="Button" parent="UI" unique_id=1196643536]
+[node name="VerticalButton" type="Button" parent="UI" unique_id=2118338612]
 offset_left = 440.0
 offset_top = 20.0
 offset_right = 560.0
 offset_bottom = 60.0
+text = "Vertical"
+
+[node name="ChamferButton" type="Button" parent="UI" unique_id=1588051274]
+offset_left = 580.0
+offset_top = 20.0
+offset_right = 700.0
+offset_bottom = 60.0
+text = "Chamfer"
+
+[node name="FilletButton" type="Button" parent="UI" unique_id=1196643536]
+offset_left = 720.0
+offset_top = 20.0
+offset_right = 840.0
+offset_bottom = 60.0
 text = "Fillet"
+
+[node name="SettingsButton" type="Button" parent="UI" unique_id=1196643537]
+offset_left = 860.0
+offset_top = 20.0
+offset_right = 980.0
+offset_bottom = 60.0
+toggle_mode = true
+text = "Settings"
+
+[node name="SettingsPanel" type="PanelContainer" parent="UI" unique_id=1196643538]
+visible = false
+offset_left = 1560.0
+offset_top = 80.0
+offset_right = 1900.0
+offset_bottom = 360.0
+script = ExtResource("10_settings")
 
 [connection signal="input_event" from="Sketch/Area3D" to="Sketch" method="_on_sketch_plane_input"]
 [connection signal="pressed" from="UI/SolveButton" to="Sketch" method="_on_solve_button_pressed"]
+[connection signal="toggled" from="UI/LineButton" to="Sketch" method="_on_line_button_toggled"]
+[connection signal="toggled" from="UI/CircleButton" to="Sketch" method="_on_circle_button_toggled"]
 [connection signal="pressed" from="UI/VerticalButton" to="Sketch" method="_on_vertical_button_pressed"]
 [connection signal="pressed" from="UI/ChamferButton" to="Sketch" method="_on_chamfer_button_pressed"]
 [connection signal="pressed" from="UI/FilletButton" to="Sketch" method="_on_fillet_button_pressed"]
+[connection signal="toggled" from="UI/SettingsButton" to="UI/SettingsPanel" method="set_visible"]
